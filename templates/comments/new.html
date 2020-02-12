@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="container">
+	<div class="row">
+		<h1 style="text-align:center">ADD a new comment to {{ place.name }}</h1>
+		<div style="width:30%; margin: 25px auto; ">
+			<form action="/{{ place.id }}/comments" method="POST">     {% csrf_token %}                               			 
+			<div class="form-group">
+				<input class="form-control" type="text" name="text" placeholder="text">
+			</div>
+			<div class="form-group">
+				<button class="btn btn-lg btn-primary btn-default btn-block">Submit!</button>
+			</div>
+		</form>
+		<a href="" title="Go Back">go back</a>                                               
+		</div>                                              
+	</div>
+</div>
+
+
+{% endblock %}

@@ -1,0 +1,63 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="container">
+	<div class="row">
+		<div class="col-md-3">
+			<p class="lead">KASH</p>
+			<div class="list-group">
+				<li class="list-group-item active">Info 1</li>
+				<li class="list-group-item">Info 2</li>
+				<li class="list-group-item">Info 3</li>
+			</div>
+		</div>
+		<div class="col-md-9">
+			<div class="thumbnail">
+				<img class="image-responsive" src="{{ place.image }}">
+				<div class="caption-full">
+					<h4 class="pull-right">${{ place.price }}/night</h4>
+					<h4><a>{{ place.name }}</a></h4>
+					<p>{{ place.description }}</p>
+					<p> <em>Submitted By : </em> {{ place.author.username }}</p>
+					{% if user.id == place.author.id %}
+					<a class="btn btn-xs btn-warning" href="/{{ place.id }}/edit" >Edit</a>
+					<form class="delete-form" action="/{{ place.id }}?method=DELETE" method="POST" >	
+						{% csrf_token %}								
+						<button class="btn btn-xs btn-danger" >DELETE</button>
+					</form>
+					{% endif %}
+				</div>
+			</div>
+			<div class="well">
+				<div class="text-right">
+					<a class="btn btn-success" href="/{{ place.id }}/comments/new" >Add a new comment</a>																	
+				</div>
+				<hr>
+				{% for comment in place.comments.all %}
+					<div class="row">
+						<div class="col-md-12 mb-2">
+							<strong>{{ comment.author.username }}</strong>
+							<span class="pull-right">10 days ago</span>
+							<p>{{ comment.text }}</p>
+							{% if user.id == place.author.id %}
+							<a class="btn btn-xs btn-warning" 
+							   href="/{{ place.id }}/comments/{{ comment.id }}/edit" 
+							>
+								Edit
+							</a>
+							<form class="delete-form" action="/{{ place.id }}/comments/{{ comment.id }}?method=DELETE" method="POST"
+							> {% csrf_token %}
+
+								<button class="btn btn-xs btn-danger" >Delete</button>
+							</form>
+							{% endif %}
+						</div>
+					</div>	
+				{% endfor %}
+			</div>
+		</div>
+	</div>
+</div>
+
+ {% endblock %}
