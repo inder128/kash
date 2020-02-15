@@ -22,12 +22,20 @@ class Place(models.Model):
 class PlaceForm(forms.ModelForm):
     class Meta:
         model = Place
-        fields = ['name', 'description', 'addres', 'price', 'images']
+        fields = ['name', 'description', 'addres', 'price']
         widgets = {
             'name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Name'}),
             'description': forms.Textarea(attrs={'class': 'form-control', 'placeholder': 'Description', 'rows': 6}),
             'addres': forms.Textarea(attrs={'class': 'form-control', 'placeholder': 'Addres', 'rows': 2}),
             'price': forms.TextInput(attrs={'class':'form-control', 'placeholder':'Price'}),
+        }
+
+
+class ImagesForm(forms.ModelForm):
+    class Meta:
+        model = Place
+        fields = ['images']
+        widgets = {
             'images': forms.FileInput(attrs={'class': 'form-control', 'multiple': True})
         }
 

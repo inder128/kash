@@ -6,8 +6,15 @@
 	<div class="row">
 		<h1 style="text-align:center">Create a New Place</h1>
 		<div style="width:40%; margin: 25px auto; ">
-			<form action="/" id="imageUploadForm" method="POST" enctype="multipart/form-data">{% csrf_token %}
+			<form action="/" id="placeForm" method="POST">{% csrf_token %}
 				{% for f in form%}
+					<div class="form-group">
+						{{f}}
+					</div>
+				{% endfor %}
+			</form>
+			<form action="/" id="imagesForm" method="POST" enctype="multipart/form-data">{% csrf_token %}
+				{% for f in imagesform%}
 					<div class="form-group">
 						{{f}}
 					</div>
@@ -33,7 +40,8 @@
 			if (parseInt($fileUpload.get(0).files.length) > 3){
 				alert("You are only allowed to upload a maximum of 3 files");
 			} else{
-				$("#imageUploadForm").submit();
+				$("#imagesForm").submit();
+				$("#placeForm").submit();
 			}
 		});
 	});

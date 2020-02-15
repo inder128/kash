@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from .models import Place, Comment, Image, PlaceForm#, ImagesForm
+from .models import Place, Comment, Image, PlaceForm, ImagesForm
 from django.shortcuts import redirect
 from django.http import HttpResponse
 from django.contrib import messages
@@ -33,7 +33,8 @@ def places(request):
 def newplace(request):
 	if(request.user.is_authenticated):
 		form = PlaceForm()
-		return render(request, 'places/new.html', {'form':form})
+		imagesform = ImagesForm()
+		return render(request, 'places/new.html', {'form': form, 'imagesform': imagesform})
 	else:
 		messages.error(request, "Please login first!!!")
 		return redirect('/login/')
