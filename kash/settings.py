@@ -24,6 +24,8 @@ SECRET_KEY = 'r5zf_^nw9u!d51y7x5847rs0bjbnz8lt^j48nixr=srjskz1dv'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
+SECURE_SSL_REDIRECT = False
+
 
 ALLOWED_HOSTS = []
 
@@ -47,13 +49,15 @@ INSTALLED_APPS = [
     'allauth.socialaccount',
     'allauth.socialaccount.providers.facebook',
     'allauth.socialaccount.providers.google',
+
+    "sslserver",
 ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
-    'django.middleware.csrf.CsrfViewMiddleware',
+    # 'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
@@ -134,3 +138,10 @@ STATICFILES_DIRS = [
 STATIC_ROOT = os.path.join(BASE_DIR,'assets')
 
 SITE_ID = 1
+
+LOGIN_REDIRECT_URL = "/"
+
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+

@@ -1,29 +1,39 @@
 from django.shortcuts import render
-from .models import Place, Comment
+from .models import Place, Comment, Image, PlaceForm#, ImagesForm
 from django.shortcuts import redirect
 from django.http import HttpResponse
 from django.contrib import messages
-
-
+import requests
 # Create your views here.
 
 
 
 def places(request):
 	if(request.method=="POST"):
-		name = request.POST.get('name')
-		price = request.POST.get('price')
-		image = request.POST.get('image')
-		description = request.POST.get('description')
-		author = request.user
-		place = Place(name=name, price=price, image=image, description=description, author=author)
-		place.save()
+		form = PlaceForm(request.POST, request.FILES)
+		files = request.FILES.getlist('images')
+		if form.is_valid():
+			place = form.save(commit=False)
+			place.images = None
+			place.author = request.user
+			r = requests.get('https://maps.googleapis.com/maps/api/geocode/json?address=' + "+".join(place.addres.split()) + '&key=AIzaSyBiAJZoPr2LmHh9CRquaUYqIaZuvx4IxIE')
+			place.gmaddres = r.json()['results'][0]['formatted_address']
+			place.lat = r.json()['results'][0]['geometry']['location']['lat']
+			place.lng = r.json()['results'][0]['geometry']['location']['lng']
+			place.save()
+			for f in files:
+				image = Image(place=place, image=f)
+				image.save()
+			place.images = image.image
+			place.save()
 		messages.success(request, "Successfuly added Place!!!")
+	print(Place.objects.all())
 	return render(request, 'places/places.html', {'places': Place.objects.all()})
 
 def newplace(request):
 	if(request.user.is_authenticated):
-		return render(request, 'places/new.html')
+		form = PlaceForm()
+		return render(request, 'places/new.html', {'form':form})
 	else:
 		messages.error(request, "Please login first!!!")
 		return redirect('/login/')
@@ -39,20 +49,22 @@ def	placeshow(request, id):
 		place = Place.objects.filter(id=id)[0]
 		place.name = request.POST.get('name')
 		place.price = request.POST.get('price')
-		place.image = request.POST.get('image')
+		print(request.POST.get('custId1'))
+		# place.image = request.POST.get('image')
 		place.description = request.POST.get('description')
 		place.save()
 		messages.success(request, "Successfuly updated Place!!!")
 		return redirect('/' + str(id))
 
 	place = Place.objects.filter(id=id)[0]
-	return render(request, 'places/show.html', {'place': place})
+	images = Image.objects.filter(place=place)
+	return render(request, 'places/show.html', {'place': place, 'images':images})
 
 
 def editplace(request, id):
 	place = Place.objects.filter(id=id)[0]
 	return render(request, 'places/edit.html', {'place': place})
-	
+
 
 def newcomment(request, id):
 	if(request.user.is_authenticated):

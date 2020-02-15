@@ -10,6 +10,8 @@ urlpatterns = [
     path('login/', views.login),
    	path('logout/', views.logout),
    	path('register/', views.register),
+    path('accounts/', include("allauth.urls")),
+
 ] 
 
-#urlpatterns = urlpatterns + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+urlpatterns = urlpatterns + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

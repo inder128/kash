@@ -14,11 +14,10 @@
 
                                                                                
     <div class="row text-center" style="display:flex; flex-wrap:wrap">
-
         {% for place in places %}
             <div class="col-md-3 col-sm-6">
                 <div class="thumbnail">
-                    <img src="{{ place.image }}">
+                    <img src="/media/{{ place.images }}">
                     <div class="caption">
                         <h4>{{ place.name }}</h4>
                     </div>

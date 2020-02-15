@@ -4,29 +4,38 @@
 
 <div class="container">
 	<div class="row">
-		<h1 style="text-align:center">Create a new place</h1>
-		<div style="width:30%; margin: 25px auto; ">
-			<form action="/" method="POST">{% csrf_token %}
-				<div class="form-group">
-					<input class="form-control" type="text" name="name" placeholder="name">
-				</div>
-				<div class="form-group">
-					<input class="form-control" type="number" name="price" placeholder="price" min="1" step="1">
-				</div>
-				<div class="form-group">
-					<input class="form-control" type="text" name="image" placeholder="image">
-				</div>
-				<div class="form-group">
-					<input class="form-control" type="text" name="description" placeholder="description">
-				</div>
-				<div class="form-group">
-					<button class="btn btn-lg btn-primary btn-default btn-block">Submit!</button>
-				</div>
+		<h1 style="text-align:center">Create a New Place</h1>
+		<div style="width:40%; margin: 25px auto; ">
+			<form action="/" id="imageUploadForm" method="POST" enctype="multipart/form-data">{% csrf_token %}
+				{% for f in form%}
+					<div class="form-group">
+						{{f}}
+					</div>
+				{% endfor %}
 			</form>
-			<a href="/" title="Go Back">go back</a>                                               
+			<div class="form-group">
+				<button  id='submit' class="btn btn-lg btn-primary btn-default btn-block">Submit!</button>
+			</div>
+			<a href="/" title="Go Back">GO BACK</a>                                               
 		</div>                                              
 	</div>
 </div>
 
 
  {% endblock %}
+
+
+{% block js %}
+<script>
+	$(function(){
+		$("#submit").click(function(){
+			var $fileUpload = $("input[type='file']");
+			if (parseInt($fileUpload.get(0).files.length) > 3){
+				alert("You are only allowed to upload a maximum of 3 files");
+			} else{
+				$("#imageUploadForm").submit();
+			}
+		});
+	});
+</script>
+{% endblock %}
